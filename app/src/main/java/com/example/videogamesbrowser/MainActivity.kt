@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.videogamesbrowser.ui.games.GamesScreen
+import com.example.videogamesbrowser.ui.navigation.AppNavGraph
 import com.example.videogamesbrowser.ui.theme.VideoGamesBrowserTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,7 +24,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             VideoGamesBrowserTheme {
-                GamesScreen()
+                AppNavGraph()
             }
         }
     }
