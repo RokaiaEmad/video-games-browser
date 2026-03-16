@@ -1,8 +1,11 @@
 package com.example.videogamesbrowser.ui.details
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.example.videogamesbrowser.domain.usecase.GetGameDetailsUseCase
+import com.example.videogamesbrowser.ui.navigation.GameDetailsDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,13 +15,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GameDetailsViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val getGameDetailsUseCase: GetGameDetailsUseCase
 ) : ViewModel() {
-
+    private val gameId = savedStateHandle.toRoute<GameDetailsDestination>().gameId
     private val _uiState = MutableStateFlow(GameDetailsUiState())
     val uiState: StateFlow<GameDetailsUiState> = _uiState
 
-    fun loadGameDetails(id: Int) {
+    init {
+        loadGameDetails()
+    }
+
+    fun retry() {
+        loadGameDetails()
+    }
+
+    fun loadGameDetails() {
         if (_uiState.value.isLoading) return
 
         viewModelScope.launch {
@@ -30,7 +42,7 @@ class GameDetailsViewModel @Inject constructor(
             }
 
             try {
-                val result = getGameDetailsUseCase(id)
+                val result = getGameDetailsUseCase(gameId)
                 _uiState.update {
                     it.copy(
                         gameDetails = result,

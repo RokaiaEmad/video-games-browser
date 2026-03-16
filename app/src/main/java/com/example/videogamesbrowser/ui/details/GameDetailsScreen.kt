@@ -21,17 +21,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.videogamesbrowser.ui.common.ErrorContent
 import com.example.videogamesbrowser.ui.common.LoadingContent
+import com.example.videogamesbrowser.utils.Constants
 
 @Composable
 fun GameDetailsScreen(
-    id: Int,
     viewModel: GameDetailsViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
-
-    LaunchedEffect(id) {
-        viewModel.loadGameDetails(id)
-    }
 
     when {
         state.isLoading -> {
@@ -40,7 +36,7 @@ fun GameDetailsScreen(
 
         state.error != null -> {
             ErrorContent(state.error!!) {
-                viewModel.loadGameDetails(id)
+                viewModel.retry()
             }
         }
 
@@ -72,15 +68,15 @@ fun GameDetailsScreen(
                     }
 
                     item {
-                        Text("Release date: ${game.released ?: "Unknown"}")
+                        Text("Release date: ${game.released}")
                     }
 
                     item {
-                        Text("Rating: ${game.rating ?: 0.0}")
+                        Text("Rating: ${game.rating}")
                     }
 
                     item {
-                        Text(game.description ?: "No description available")
+                        Text(game.description ?: Constants.description)
                     }
                 }
             }
