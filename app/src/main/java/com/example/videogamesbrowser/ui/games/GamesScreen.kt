@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.videogamesbrowser.ui.common.ErrorContent
 import com.example.videogamesbrowser.ui.common.LoadingContent
 
@@ -29,7 +30,7 @@ fun GamesScreen(
     viewModel: GamesViewModel = hiltViewModel()
 ) {
 
-    val state by viewModel.uiState.collectAsState()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
     val listState = rememberLazyListState()
 
     val shouldLoadMore = remember {
