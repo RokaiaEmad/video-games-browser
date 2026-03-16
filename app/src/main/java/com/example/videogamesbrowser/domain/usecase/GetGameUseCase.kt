@@ -1,7 +1,7 @@
 package com.example.videogamesbrowser.domain.usecase
 
 
-import com.example.videogamesbrowser.domain.model.response.Game
+import com.example.videogamesbrowser.data.remote.model.Game
 import com.example.videogamesbrowser.domain.repository.GameRepository
 import javax.inject.Inject
 

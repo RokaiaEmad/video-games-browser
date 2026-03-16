@@ -1,6 +1,7 @@
 package com.example.videogamesbrowser.domain.repository
 
-import com.example.videogamesbrowser.domain.model.response.Game
+import com.example.videogamesbrowser.data.remote.model.GameDetailsResponse
+import com.example.videogamesbrowser.data.remote.model.Game
 
 interface GameRepository {
 
@@ -9,5 +10,7 @@ interface GameRepository {
         page: Int,
         pageSize: Int
     ): List<Game>
+
+    suspend fun getGameDetails(id:Int): GameDetailsResponse
 
 }

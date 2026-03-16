@@ -1,7 +1,9 @@
 package com.example.videogamesbrowser.data.remote.api
 
-import com.example.videogamesbrowser.domain.model.response.GamesResponse
+import com.example.videogamesbrowser.data.remote.model.GameDetailsResponse
+import com.example.videogamesbrowser.data.remote.model.GameResponse
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 interface GamesApiService {
     @GET("games")
@@ -10,5 +12,11 @@ interface GamesApiService {
         @Query("genres") genre: String,
         @Query("page") page: Int,
         @Query("page_size") pageSize: Int
-    ): GamesResponse
+    ): GameResponse
+
+    @GET("games/{id}")
+    suspend fun getGameDetails(
+        @Path("id") id: Int,
+        @Query("key") apiKey: String,
+    ): GameDetailsResponse
 }

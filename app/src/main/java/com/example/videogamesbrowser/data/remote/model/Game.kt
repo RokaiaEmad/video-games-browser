@@ -1,4 +1,4 @@
-package com.example.videogamesbrowser.domain.model.response
+package com.example.videogamesbrowser.data.remote.model
 
 import com.google.gson.annotations.SerializedName
 

@@ -1,6 +1,6 @@
 package com.example.videogamesbrowser.ui.games
 
-import com.example.videogamesbrowser.domain.model.response.Game
+import com.example.videogamesbrowser.data.remote.model.Game
 
 data class GamesUiState(
     val games: List<Game> = emptyList(),

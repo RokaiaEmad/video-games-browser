@@ -1,7 +1,8 @@
 package com.example.videogamesbrowser.data.repository
 
 import com.example.videogamesbrowser.data.datasource.MainDataSource
-import com.example.videogamesbrowser.domain.model.response.Game
+import com.example.videogamesbrowser.data.remote.model.GameDetailsResponse
+import com.example.videogamesbrowser.data.remote.model.Game
 import com.example.videogamesbrowser.domain.repository.GameRepository
 import javax.inject.Inject
 
@@ -19,5 +20,9 @@ class GameRepositoryImpl @Inject constructor(
             page = page,
             pageSize = pageSize
         ).results
+    }
+
+    override suspend fun getGameDetails(id: Int): GameDetailsResponse {
+        return mainDataSource.getGameDetails(id)
     }
 }

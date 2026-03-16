@@ -1,14 +1,11 @@
 package com.example.videogamesbrowser.ui.games
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
@@ -23,9 +20,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.videogamesbrowser.ui.common.ErrorContent
+import com.example.videogamesbrowser.ui.common.LoadingContent
 
 @Composable
 fun GamesScreen(
+    onGameClick: (Int) -> Unit,
     viewModel: GamesViewModel = hiltViewModel()
 ) {
 
@@ -50,25 +50,12 @@ fun GamesScreen(
     when {
 
         state.isLoading -> {
-            Box(
-                Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
+            LoadingContent()
         }
 
         state.error != null -> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = state.error!! + " (Tap to retry)",
-                    modifier = Modifier.clickable {
-                        viewModel.loadGames()
-                    })
-
+            ErrorContent(state.error!!) {
+                viewModel.loadGames()
             }
         }
 
@@ -89,7 +76,11 @@ fun GamesScreen(
                 ) {
 
                     items(state.filteredGames) { game ->
-                        GameItem(game)
+                        GameItem(
+                            game,
+                            onClick = { id ->
+                                onGameClick(id)
+                            })
                     }
 
                     if (state.isLoadingMore) {

@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GamesViewModel @Inject constructor(
-    private val getGamesUseCase: GetGameUseCase
+    private val getGameUseCase: GetGameUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(GamesUiState())
@@ -61,7 +61,7 @@ class GamesViewModel @Inject constructor(
             }
 
             try {
-                val result = getGamesUseCase(page)
+                val result = getGameUseCase(page)
                 _uiState.update { state ->
 
                     val updatedGames =
