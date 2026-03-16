@@ -75,7 +75,7 @@ fun GameDetailsScreen(
                     }
 
                     item {
-                        Text(game.description ?: Constants.description)
+                        Text(game.description ?: Constants.DESCRIPTION)
                     }
                 }
             }

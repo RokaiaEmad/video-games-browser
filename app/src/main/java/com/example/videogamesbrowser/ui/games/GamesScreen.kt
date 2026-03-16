@@ -6,21 +6,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import com.example.videogamesbrowser.ui.common.ErrorContent
 import com.example.videogamesbrowser.ui.common.LoadingContent
 
@@ -29,34 +27,19 @@ fun GamesScreen(
     onGameClick: (Int) -> Unit,
     viewModel: GamesViewModel = hiltViewModel()
 ) {
-
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val listState = rememberLazyListState()
+    val pagingItems = viewModel.gamesPagingFlow.collectAsLazyPagingItems()
 
-    val shouldLoadMore = remember {
-        derivedStateOf {
-            val lastVisibleItem =
-                listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+    val isSearching = state.searchQuery.isNotBlank()
 
-            lastVisibleItem >= state.games.size - 3
-        }
-    }
-
-    LaunchedEffect(shouldLoadMore.value) {
-        if (shouldLoadMore.value) {
-            viewModel.loadNextPage()
-        }
-    }
-
-    when {
-
-        state.isLoading -> {
+    when (val refreshState = pagingItems.loadState.refresh) {
+        is LoadState.Loading -> {
             LoadingContent()
         }
 
-        state.error != null -> {
-            ErrorContent(state.error!!) {
-                viewModel.loadGames()
+        is LoadState.Error -> {
+            ErrorContent(refreshState.error.message ?: "Unknown error") {
+                pagingItems.retry()
             }
         }
 
@@ -64,41 +47,67 @@ fun GamesScreen(
             Column {
                 OutlinedTextField(
                     value = state.searchQuery,
-                    onValueChange = {
-                        viewModel.onSearchQueryChanged(it)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
+                    onValueChange = viewModel::onSearchQueryChanged,
+                    modifier = Modifier.fillMaxWidth().padding(8.dp),
                     label = { Text("Search games") }
                 )
-                LazyColumn(
-                    state = listState
-                ) {
 
-                    items(state.filteredGames) { game ->
-                        GameItem(
-                            game,
-                            onClick = { id ->
-                                onGameClick(id)
-                            })
-                    }
-
-                    if (state.isLoadingMore) {
-                        item {
-                            Box(
-                                modifier = Modifier.fillMaxWidth(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.padding(16.dp)
-                                )
+                LazyColumn {
+                    if (isSearching) {
+                        val filtered = pagingItems.itemSnapshotList.items
+                            .filter { game ->
+                                game.name.contains(state.searchQuery, ignoreCase = true)
                             }
+
+                        items(items = filtered, key = { it.id }) { game ->
+                            GameItem(game = game, onClick = onGameClick)
+                        }
+
+                        if (filtered.isEmpty()) {
+                            item {
+                                Box(
+                                    modifier = Modifier.fillMaxWidth().padding(32.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text("No games found for \"${state.searchQuery}\"")
+                                }
+                            }
+                        }
+
+                    } else {
+                        items(
+                            count = pagingItems.itemCount,
+                            key = pagingItems.itemKey { it.id }
+                        ) { index ->
+                            val game = pagingItems[index]
+                            if (game != null) {
+                                GameItem(game = game, onClick = onGameClick)
+                            }
+                        }
+
+                        when (val appendState = pagingItems.loadState.append) {
+                            is LoadState.Loading -> {
+                                item {
+                                    Box(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        CircularProgressIndicator(modifier = Modifier.padding(16.dp))
+                                    }
+                                }
+                            }
+                            is LoadState.Error -> {
+                                item {
+                                    ErrorContent(appendState.error.message ?: "Failed to load more") {
+                                        pagingItems.retry()
+                                    }
+                                }
+                            }
+                            else -> Unit
                         }
                     }
                 }
             }
-
         }
     }
 }

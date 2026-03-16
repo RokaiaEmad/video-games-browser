@@ -1,23 +1,16 @@
 package com.example.videogamesbrowser.domain.usecase
 
 
+import androidx.paging.PagingData
 import com.example.videogamesbrowser.data.remote.model.Game
 import com.example.videogamesbrowser.domain.repository.GameRepository
-import com.example.videogamesbrowser.utils.Constants
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetGameUseCase @Inject constructor(
     private val gameRepository: GameRepository
 ) {
-    suspend operator fun invoke(
-        page: Int = 1,
-        genre: String = Constants.DEFAULT_GENRE,
-        pageSize: Int = Constants.PAGE_SIZE
-    ): List<Game> {
-        return gameRepository.getGames(
-            genre = genre,
-            page = page,
-            pageSize = pageSize
-        )
+    operator fun invoke(): Flow<PagingData<Game>> {
+        return gameRepository.getGames()
     }
 }
