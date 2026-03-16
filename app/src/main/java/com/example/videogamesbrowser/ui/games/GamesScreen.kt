@@ -48,7 +48,7 @@ fun GamesScreen(
                 OutlinedTextField(
                     value = state.searchQuery,
                     onValueChange = viewModel::onSearchQueryChanged,
-                    modifier = Modifier.fillMaxWidth().padding(8.dp),
+                    modifier = Modifier.fillMaxWidth().padding(14.dp),
                     label = { Text("Search games") }
                 )
 

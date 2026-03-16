@@ -30,4 +30,6 @@ object DataBaseModule {
     fun provideGameDao(database: AppDataBase): GameDao {
         return database.gameDao()
     }
+
+
 }
