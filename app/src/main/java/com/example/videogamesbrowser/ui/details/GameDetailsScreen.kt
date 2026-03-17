@@ -89,7 +89,7 @@ fun GameDetailsScreen(
 
 
 @Composable
-fun GameHeader(
+private fun GameHeader(
     imageUrl: String,
     title: String
 ) {
@@ -139,7 +139,7 @@ fun GameHeader(
 }
 
 @Composable
-fun GameStats(
+private fun GameStats(
     rating: Double,
     released: String
 ) {
@@ -169,7 +169,7 @@ fun GameStats(
 }
 
 @Composable
-fun StatCard(
+private fun StatCard(
     value: String,
     label: String,
     containerColor: Color,
@@ -203,7 +203,7 @@ fun StatCard(
 }
 
 @Composable
-fun GameDivider() {
+private fun GameDivider() {
     HorizontalDivider(
         modifier = Modifier.padding(horizontal = 20.dp),
         color = MaterialTheme.colorScheme.outlineVariant
@@ -211,7 +211,7 @@ fun GameDivider() {
 }
 
 @Composable
-fun GameDescription(description: String) {
+private fun GameDescription(description: String) {
     Column(
         modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)
     ) {
@@ -236,6 +236,6 @@ fun GameDescription(description: String) {
 }
 
 @Composable
-fun BottomSpacer() {
+private fun BottomSpacer() {
     Spacer(modifier = Modifier.height(32.dp))
 }

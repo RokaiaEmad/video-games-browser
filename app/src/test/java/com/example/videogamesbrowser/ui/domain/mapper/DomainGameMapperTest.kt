@@ -10,7 +10,6 @@ class DomainGameMapperTest {
 
     @Test
     fun `toDomain maps all fields correctly`() {
-        // Given
         val dto = GameDto(
             id = 1,
             name = "Zelda",
@@ -18,10 +17,8 @@ class DomainGameMapperTest {
             rating = 4.5
         )
 
-        // When
         val result = dto.toDomain()
 
-        // Then
         assertEquals(1, result.id)
         assertEquals("Zelda", result.name)
         assertEquals("url", result.backgroundImage)
@@ -30,7 +27,6 @@ class DomainGameMapperTest {
 
     @Test
     fun `toDomain uses defaults for null fields`() {
-        // Given
         val dto = GameDto(
             id = null,
             name = null,
@@ -38,10 +34,8 @@ class DomainGameMapperTest {
             rating = null
         )
 
-        // When
         val result = dto.toDomain()
 
-        // Then
         assertEquals(0, result.id)
         assertEquals("", result.name)
         assertEquals("", result.backgroundImage)

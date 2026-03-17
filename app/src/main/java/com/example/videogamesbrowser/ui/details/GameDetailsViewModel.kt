@@ -20,7 +20,7 @@ class GameDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getGameDetailsUseCase: GetGameDetailsUseCase
 ) : ViewModel() {
-    private val gameId = savedStateHandle.toRoute<GameDetailsDestination>().gameId
+    private val gameId = savedStateHandle.get<Int>("gameId") ?: 0
     private val _uiState = MutableStateFlow(GameDetailsUiState())
     val uiState: StateFlow<GameDetailsUiState> = _uiState
 
@@ -37,12 +37,12 @@ class GameDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             getGameDetailsUseCase(gameId)
                 .onStart {
-                    _uiState.update {
-                        it.copy(
-                            isLoading = true,
-                            error = null
-                        )
-                    }
+//                    _uiState.update {
+//                        it.copy(
+//                            isLoading = true,
+//                            error = null
+//                        )
+//                    }
 
                 }
                 .catch { error ->

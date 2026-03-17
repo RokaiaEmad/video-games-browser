@@ -13,7 +13,7 @@ import javax.inject.Inject
 class GetGameDetailsUseCase @Inject constructor(
     private val gameRepository: GameRepository
 ) {
-    suspend operator fun invoke(
+    operator fun invoke(
         id: Int
     ): Flow<DomainGameDetails> = flow {
         val gameDto = gameRepository.getGameDetails(id)
