@@ -28,6 +28,18 @@ This is an Android application that allows users to browse video games by genre 
 
 - **Architecture:** MVVM
   - **Rationale:** MVVM is used to separate UI-related logic from business logic, making the codebase more maintainable and testable. The **ViewModel** is responsible for preparing and managing UI-related data, while the **Model** layer handles business logic and data fetching. This separation allows for easier unit testing and clear separation of concerns in the application.
+ 
+## Unit Testing
+
+### Unit Tests for Mapper and GetGameDetailsUseCase
+
+### Libraries Used for Unit Testing
+
+
+- **JUnit**
+- **MockK**
+- **Kotlin Coroutines Test**
+- **Turbine**
 
 ## Assumptions/Shortcuts
 
