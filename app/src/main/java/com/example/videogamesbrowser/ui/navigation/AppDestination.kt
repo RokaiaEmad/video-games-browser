@@ -4,7 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 object GamesDestination
-
 @Serializable
 data class GameDetailsDestination(
     val gameId: Int

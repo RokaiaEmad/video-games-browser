@@ -20,3 +20,4 @@ interface GameDao {
     @Query("SELECT COUNT(*) FROM games")
     suspend fun getGamesCount(): Int
 }
+
