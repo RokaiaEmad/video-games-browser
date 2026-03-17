@@ -46,6 +46,22 @@ This is an Android application that allows users to browse video games by genre 
 - **Offline Caching:** Due to time constraints, offline caching (such as using Room for local storage) was not implemented.
 - **Genre Selection:** The genre list (e.g., "Action") is dynamically retrieved from the RAWG API, and the genre selection UI is simplified for this implementation.
 
+## Future Improvements
+
+### Offline Caching with Room + Paging 3
+The next planned improvement is implementing offline caching using Room database 
+integrated with Paging 3 via RemoteMediator. This will allow the app to:
+- Cache game data locally so users can browse without an internet connection
+- Use RemoteMediator to coordinate between the network and local database
+
+**Planned Tech:**
+- Room Database for local storage
+- RemoteMediator to sync network and local data
+- Paging 3 integrated with Room PagingSource
+
+### Complete Unit Testing
+Currently the project includes unit tests for the Mapper and GetGameDetailsUseCase. 
+
 ## Screenshots
 <img width="429" height="776" alt="image" src="https://github.com/user-attachments/assets/b6d48a45-2fc6-4ff0-947d-f7c762a1d457" />
 <img width="441" height="798" alt="image" src="https://github.com/user-attachments/assets/45a493e2-3a3d-4911-9549-d592ec6bbc4f" />
