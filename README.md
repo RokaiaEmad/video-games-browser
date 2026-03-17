@@ -7,6 +7,9 @@ ratings, and release dates, and allows users to view detailed information
 for each game. Built with modern Android development practices including 
 Jetpack Compose, MVVM architecture, and Dagger Hilt.
 
+## Demo
+[▶ Watch Demo Video](https://drive.google.com/file/d/1iGy5sxWcvGM8UG6_flhoxtZn0MEkO3Sc/view?usp=sharing)
+
 ## Features
 - Browse video games by Action genre
 - View game details including name, image, release date, rating, and description
@@ -68,6 +71,3 @@ Jetpack Compose, MVVM architecture, and Dagger Hilt.
 4. Get your free API key from https://rawg.io/apidocs
 5. Build and run the project
 
-## Screenshots
-<img width="429" height="776" alt="image" src="https://github.com/user-attachments/assets/b6d48a45-2fc6-4ff0-947d-f7c762a1d457" />
-<img width="441" height="798" alt="image" src="https://github.com/user-attachments/assets/45a493e2-3a3d-4911-9549-d592ec6bbc4f" />
