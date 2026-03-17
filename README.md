@@ -44,7 +44,9 @@ This is an Android application that allows users to browse video games by genre 
 ## Assumptions/Shortcuts
 
 - **Offline Caching:** Due to time constraints, offline caching (such as using Room for local storage) was not implemented.
-- **Genre Selection:** The genre list (e.g., "Action") is dynamically retrieved from the RAWG API, and the genre selection UI is simplified for this implementation.
+- **Genre Selection:** The genre is currently "Action". 
+  In a future version, users will be able to select genres dynamically 
+  from a list fetched from the RAWG API.
 
 ## Future Improvements
 
