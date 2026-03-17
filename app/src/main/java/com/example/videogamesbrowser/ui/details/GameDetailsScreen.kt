@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -32,8 +33,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.example.videogamesbrowser.ui.common.ErrorContent
 import com.example.videogamesbrowser.ui.common.LoadingContent
-import com.example.videogamesbrowser.utils.Constants
-import androidx.core.text.HtmlCompat
+import com.example.videogamesbrowser.R
+import com.example.videogamesbrowser.utils.parseHtmlDescription
+
 @Composable
 fun GameDetailsScreen(
     viewModel: GameDetailsViewModel = hiltViewModel()
@@ -44,52 +46,51 @@ fun GameDetailsScreen(
         state.isLoading -> LoadingContent()
 
         state.error != null -> {
-            ErrorContent(state.error!!) { viewModel.retry() }
+            ErrorContent(state.error.toString()) { viewModel.retry() }
         }
 
-        state.gameDetails != null -> {
-            val game = state.gameDetails!!
+        else -> {
+            state.gameDetails?.let { game ->
 
-            val cleanDescription = game.description?.let {
-                HtmlCompat.fromHtml(it, HtmlCompat.FROM_HTML_MODE_LEGACY)
-                    .toString()
-                    .trim()
-            } ?: Constants.DESCRIPTION
+                val cleanDescription = parseHtmlDescription(game.description)
 
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
 
-                item {
-                    GameHeader(
-                        imageUrl = game.imageUrl,
-                        title = game.name
-                    )
-                }
+                    item {
+                        GameHeader(
+                            imageUrl = game.imageUrl,
+                            title = game.name
+                        )
+                    }
 
-                item {
-                    GameStats(
-                        rating = game.rating,
-                        released = game.released
-                    )
-                }
+                    item {
+                        GameStats(
+                            rating = game.rating,
+                            released = game.released
+                        )
+                    }
 
-                item {
-                    GameDivider()
-                }
+                    item {
+                        GameDivider()
+                    }
 
-                item {
-                    GameDescription(cleanDescription)
-                }
+                    item {
+                        GameDescription(cleanDescription)
+                    }
 
-                item {
-                    BottomSpacer()
+                    item {
+                        BottomSpacer()
+                    }
                 }
             }
         }
     }
 }
+
+
 @Composable
 fun GameHeader(
-    imageUrl: String?,
+    imageUrl: String,
     title: String
 ) {
     Box(
@@ -136,10 +137,11 @@ fun GameHeader(
         }
     }
 }
+
 @Composable
 fun GameStats(
     rating: Double,
-    released: String?
+    released: String
 ) {
     Row(
         modifier = Modifier
@@ -150,21 +152,22 @@ fun GameStats(
 
         StatCard(
             value = "⭐ $rating",
-            label = "Rating",
+            label = stringResource(R.string.rating),
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             textColor = MaterialTheme.colorScheme.onPrimaryContainer,
             modifier = Modifier.weight(1f)
         )
 
         StatCard(
-            value = released ?: "N/A",
-            label = "Released",
+            value = released,
+            label = stringResource(R.string.released),
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
             textColor = MaterialTheme.colorScheme.onSecondaryContainer,
             modifier = Modifier.weight(1f)
         )
     }
 }
+
 @Composable
 fun StatCard(
     value: String,
@@ -198,6 +201,7 @@ fun StatCard(
         }
     }
 }
+
 @Composable
 fun GameDivider() {
     HorizontalDivider(
@@ -205,6 +209,7 @@ fun GameDivider() {
         color = MaterialTheme.colorScheme.outlineVariant
     )
 }
+
 @Composable
 fun GameDescription(description: String) {
     Column(
@@ -212,7 +217,7 @@ fun GameDescription(description: String) {
     ) {
 
         Text(
-            text = "About",
+            text = stringResource(R.string.about),
             fontSize = 18.sp,
             fontWeight = FontWeight.ExtraBold,
             letterSpacing = (-0.3).sp,
@@ -229,6 +234,7 @@ fun GameDescription(description: String) {
         )
     }
 }
+
 @Composable
 fun BottomSpacer() {
     Spacer(modifier = Modifier.height(32.dp))

@@ -9,6 +9,8 @@ import com.example.videogamesbrowser.ui.navigation.GameDetailsDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -30,34 +32,36 @@ class GameDetailsViewModel @Inject constructor(
         loadGameDetails()
     }
 
-    fun loadGameDetails() {
+    private fun loadGameDetails() {
         if (_uiState.value.isLoading) return
-
         viewModelScope.launch {
-            _uiState.update {
-                it.copy(
-                    isLoading = true,
-                    error = null
-                )
-            }
+            getGameDetailsUseCase(gameId)
+                .onStart {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = true,
+                            error = null
+                        )
+                    }
 
-            try {
-                val result = getGameDetailsUseCase(gameId)
-                _uiState.update {
-                    it.copy(
-                        gameDetails = result,
-                        isLoading = false,
-                        error = null
-                    )
                 }
-            } catch (e: Exception) {
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        error = e.message
-                    )
+                .catch { error ->
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            error = error.message
+                        )
+                    }
                 }
-            }
+                .collect { result->
+                    _uiState.update {
+                        it.copy(
+                            gameDetails = result,
+                            isLoading = false,
+                            error = null
+                        )
+                    }
+                }
         }
     }
 }

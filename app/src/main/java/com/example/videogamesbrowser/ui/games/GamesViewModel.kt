@@ -3,6 +3,7 @@ package com.example.videogamesbrowser.ui.games
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import com.example.videogamesbrowser.domain.model.DomainGame
 import com.example.videogamesbrowser.domain.usecase.GetGameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,9 +23,19 @@ class GamesViewModel @Inject constructor(
     val gamesPagingFlow = getGameUseCase()
         .cachedIn(viewModelScope)
 
-    fun onSearchQueryChanged(query: String) {
+    fun onSearchQueryChanged(query: String, games: List<DomainGame>) {
+        val filteredGames = filterGames(games = games, query = query)
         _uiState.update {
-            it.copy(searchQuery = query)
+            it.copy(
+                searchQuery = query,
+                filteredGames = filteredGames,
+                searching = query.isNotEmpty()
+            )
         }
+    }
+
+    private fun filterGames(games: List<DomainGame>, query: String): List<DomainGame> {
+        return if (query.isBlank()) games
+        else games.filter { it.name.contains(query, ignoreCase = true) }
     }
 }

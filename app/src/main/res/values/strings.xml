@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">VideoGamesBrowser</string>
+    <string name="rating">Rating</string>
+    <string name="released">Released</string>
+    <string name="about">About</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="search_games">Search games</string>
+    <string name="no_games_found_for">No games found for \"%1$s\"</string>
+    <string name="failed_to_load_more">Failed to load more</string>
+    <string name="tap_to_view_details">Tap to view details</string>
 </resources>

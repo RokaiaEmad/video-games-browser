@@ -21,30 +21,32 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.videogamesbrowser.data.remote.model.Game
+import com.example.videogamesbrowser.R
+import com.example.videogamesbrowser.data.remote.dto.GameDto
+import com.example.videogamesbrowser.domain.model.DomainGame
 
 @Composable
 fun GameItem(
-    game: Game,
+    game: DomainGame,
     onClick: (Int) -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .clickable { onClick(game.id) },
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         )
     ) {
-        Column {
+        Column(modifier = Modifier.clickable { onClick(game.id) },) {
             GameThumbnail(
                 imageUrl = game.backgroundImage,
                 name = game.name,
@@ -124,7 +126,7 @@ private fun GameInfo(name: String) {
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "Tap to view details",
+            text = stringResource(R.string.tap_to_view_details),
             style = MaterialTheme.typography.bodySmall.copy(
                 fontSize = 12.sp,
                 letterSpacing = 0.2.sp

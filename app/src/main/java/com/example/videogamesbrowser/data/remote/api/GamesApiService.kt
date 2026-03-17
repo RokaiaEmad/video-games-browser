@@ -2,20 +2,21 @@ package com.example.videogamesbrowser.data.remote.api
 
 import com.example.videogamesbrowser.data.remote.dto.GameDetailsResponseDto
 import com.example.videogamesbrowser.data.remote.dto.GameResponseDto
+import com.example.videogamesbrowser.utils.Constants
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface GamesApiService {
-    @GET("games")
+    @GET(Constants.ENDPOINT_GAMES)
     suspend fun getGames(
-        @Query("genres") genre: String,
-        @Query("page") page: Int,
-        @Query("page_size") pageSize: Int
+        @Query(Constants.QUERY_GENRES) genre: String,
+        @Query(Constants.QUERY_PAGE) page: Int,
+        @Query(Constants.QUERY_PAGE_SIZE) pageSize: Int
     ): GameResponseDto
 
-    @GET("games/{id}")
+    @GET(Constants.ENDPOINT_GAME_DETAILS)
     suspend fun getGameDetails(
-        @Path("id") id: Int,
+        @Path(Constants.PATH_ID) id: Int,
     ): GameDetailsResponseDto
 }
